@@ -1,18 +1,23 @@
 package sample;
 
 //import com.sun.prism.paint.Color;
+import com.jcraft.jsch.JSchException;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.*;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import packet.BDconnector;
 import packet.Person;
 
+import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -21,11 +26,18 @@ public class Controller {
 
     private ObservableList<Person> list;
     private Drawer drawer;
-    private Manager manager;
-    private BDconnector bc;
+    //private Manager manager;
+    //private BDconnector bc;
     private TimerTask task;
     private Timer timer = new Timer();
+    private Timer animeTimer = new Timer();
+    private TimerTask draw;
+    private static boolean flag = true;
 
+    @FXML
+    private Button translate;
+    @FXML
+    private ComboBox<String> language;
     @FXML
     private TextField name;
     @FXML
@@ -59,7 +71,7 @@ public class Controller {
 
     @FXML
     private void filter(ActionEvent event){
-        ObservableList<Person> filteredList = manager.getList(bc);
+        ObservableList<Person> filteredList = Main.manager.getList(Main.bc);
         if(name.getText().length()>0){
             filteredList.clear();
             list.stream().filter(p -> p.getName().equals(name.getText())).forEach(filteredList::add);
@@ -69,9 +81,25 @@ public class Controller {
     }
 
     private void update(){
-        list = manager.getList(bc);
+        list = Main.manager.getList(Main.bc);
         personTable.setItems(list);
-        drawer.draw(list);
+        //drawer.draw(list);
+    }
+
+    private void translate(String lang){
+        flag = false;
+        switch (lang){
+            case "Русский": Main.resources = ResourceBundle.getBundle("resources/locale_ru"); break;
+            case "Nederlands": Main.resources = ResourceBundle.getBundle("resources/locale_nd"); break;
+            case "Svensk": Main.resources = ResourceBundle.getBundle("resources/locale_sw"); break;
+            case "Español": Main.resources = ResourceBundle.getBundle("resources/locale_sp"); break;
+        }
+        Scene scene = translate.getScene();
+        try {
+            scene.setRoot(FXMLLoader.load(getClass().getResource("sample.fxml"), Main.resources));
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
 
@@ -90,20 +118,31 @@ public class Controller {
         colNationality.setCellValueFactory(cellData -> cellData.getValue().getPropNationality());
         colCreator.setCellValueFactory(cellData -> cellData.getValue().getPropCreator());
 
-        manager = new Manager();
-        bc = new BDconnector();
-        drawer = new Drawer(canvas);
 
+        language.getItems().addAll("Русский", "Nederlands", "Svensk", "Español");
+        translate.setOnAction(event -> translate(language.getValue()));
+
+        list = Main.manager.getList(Main.bc);
+        drawer = new Drawer(canvas);
         personTable.setOnSort(event -> task.cancel());
 
-        /*list = manager.getList(bc);
+
+        /*
         personTable.setItems(list);
         drawer.draw(list);*/
 
         startUpdating();
+
+        draw = new TimerTask() {
+            @Override
+            public void run() {
+                drawer.draw(list);
+            }
+        };
+        animeTimer.schedule(draw, 0L, 100L);
     }
 
-    private void startUpdating(){
+    private void startUpdating() {
         task = new TimerTask() {
             @Override
             public void run() {

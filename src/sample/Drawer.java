@@ -26,6 +26,8 @@ public class Drawer {
     //ну правда костыль, зато прикольно
     private boolean kostyl;
 
+    HashMap<String,Paint> map = new HashMap<>();;
+
     private Canvas canvas;
 
     public Drawer(Canvas canvas){
@@ -39,11 +41,12 @@ public class Drawer {
         gc.setFill(Color.SILVER);
         gc.fillRect(canvasX,canvasY, canvasWidth, canvasHeight);
 
-        HashMap<String,Paint> map = getColorMap(list);
+        getColorMap(list);
 
         for (int i=0; i< list.size(); ++i){
+            double animation = Math.sin(System.currentTimeMillis());
             headX = canvasX + list.get(i).getCoordinates().getX() + list.get(i).getLocation().getX();
-            headY = canvasY + list.get(i).getCoordinates().getY() + list.get(i).getLocation().getY();
+            headY = canvasY + list.get(i).getCoordinates().getY() + list.get(i).getLocation().getY() + animation;
 
             headX = fixCoordinates(headX, canvasWidth);
             headY = fixCoordinates(headY, canvasHeight);
@@ -55,7 +58,7 @@ public class Drawer {
             eyeY = headY + (width*0.33);
 
 
-            gc.clearRect(headX, headY,width,height);
+            //gc.clearRect(headX, headY,width,height);
             gc.setFill(Color.LIGHTYELLOW);
             gc.fillRect(headX, headY, width, width);
 
@@ -89,8 +92,8 @@ public class Drawer {
         return res;
     }
 
-    private HashMap<String,Paint> getColorMap(ObservableList<Person> list){
-        HashMap<String,Paint> map = new HashMap<>();
+    private void getColorMap(ObservableList<Person> list){
+        //HashMap<String,Paint> map = new HashMap<>();
         for (int i=0; i<list.size();i++){
             if(!(map.containsKey(list.get(i).getCreator()))){
                 Integer r = (int) (Math.random()*255);
@@ -99,7 +102,6 @@ public class Drawer {
                 map.put(list.get(i).getCreator(), Color.rgb(r,g,b));
             }
         }
-        return map;
     }
 
     private double fixCoordinates(double num, double max){
