@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="540.0" style="-fx-background-color: #2E3348; -fx-border-color: #dead;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <AnchorPane layoutX="60.0" layoutY="24.0" prefHeight="353.0" prefWidth="420.0" style="-fx-background-color: #dead;">
+         <children>
+            <Text layoutX="128.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lab 8">
+               <font>
+                  <Font name="Eras Light ITC" size="71.0" />
+               </font>
+            </Text>
+            <Text layoutX="14.0" layoutY="100.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%port.text" />
+            <TextField fx:id="PortLabel" alignment="TOP_LEFT" layoutX="44.0" layoutY="82.0" prefHeight="26.0" prefWidth="115.0" promptText="%port.text" text="12345" />
+            <Button fx:id="PortButton" layoutX="159.0" layoutY="82.0" mnemonicParsing="false" prefHeight="16.0" prefWidth="80.0" text="%bind.text" />
+            <TextField fx:id="LoginLabel" layoutX="136.0" layoutY="164.0" promptText="%login.text" />
+            <PasswordField fx:id="PasswordLabel" layoutX="135.0" layoutY="204.0" promptText="%pass.text" />
+            <Text layoutX="156.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="%logOrSign.text">
+               <font>
+                  <Font name="Eras Light ITC" size="12.0" />
+               </font>
+            </Text>
+            <Button fx:id="SignUpButton" layoutX="214.0" layoutY="247.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" text="%butSign.text" />
+            <Button fx:id="LoginButton" layoutX="136.0" layoutY="247.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="71.0" text="%butLogin.text" />
+            <Button fx:id="translate" layoutX="165.0" layoutY="299.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="86.0" text="%butLang.text" />
+            <ComboBox fx:id="language" layoutX="262.0" layoutY="299.0" prefWidth="150.0" promptText="%comboLang.text" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
